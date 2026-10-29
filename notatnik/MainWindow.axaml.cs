@@ -63,6 +63,7 @@ public partial class MainWindow : Window
 
         if (string.IsNullOrWhiteSpace(title) && string.IsNullOrWhiteSpace(content))
         {
+            StatusText.Text = "Wpisz tytuł lub treść notatki.";
             return;
         }
 
@@ -87,11 +88,17 @@ public partial class MainWindow : Window
             fullContent = newEntry + "\n";
         }
 
-        File.WriteAllText(FilePath, fullContent, Encoding.UTF8);
-
-        TitleBox.Text = string.Empty;
-        ContentBox.Text = string.Empty;
-
-        LoadNotes();
+        try
+        {
+            File.WriteAllText(FilePath, fullContent, Encoding.UTF8);
+            StatusText.Text = "Zapisano";
+            TitleBox.Text = string.Empty;
+            ContentBox.Text = string.Empty;
+            LoadNotes();
+        }
+        catch (Exception ex)
+        {
+            StatusText.Text = $"Nie udało się zapisać: {ex.Message}";
+        }
     }
 }

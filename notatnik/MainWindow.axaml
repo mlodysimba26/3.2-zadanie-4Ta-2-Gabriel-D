@@ -2,10 +2,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="550"
-        Width="650" Height="550"
+        mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="600"
+        Width="700" Height="620"
         x:Class="notatnik.MainWindow"
-        Title="Notatnik - Runda 4">
+        Title="Notatnik — Zadanie 3.2">
 
     <Grid RowDefinitions="Auto,*,Auto" Margin="16">
         <!-- Formularz dodawania notatki -->
@@ -16,7 +16,8 @@
             <TextBlock Text="Treść notatki:" FontWeight="Bold" />
             <TextBox Name="ContentBox" Height="100" AcceptsReturn="True" TextWrapping="Wrap" PlaceholderText="Wpisz treść notatki..." />
             
-            <Button Name="SaveButton" Content="Zapisz notatkę" Click="SaveButton_Click" HorizontalAlignment="Left" Margin="0,4,0,10" />
+            <Button Name="SaveButton" Content="Zapisz notatkę" Click="SaveButton_Click" HorizontalAlignment="Left" Margin="0,4,0,4" />
+            <TextBlock Name="StatusText" Margin="0,0,0,10" Foreground="DimGray" TextWrapping="Wrap" />
         </StackPanel>
 
         <!-- Lista zapisanych notatek -->

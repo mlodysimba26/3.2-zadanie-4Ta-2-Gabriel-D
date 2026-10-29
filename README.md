@@ -49,3 +49,20 @@ Każda runda została utrwalona osobnym commitem w historii repozytorium Git, a 
   - *Wynik:* model wskazał 5 kluczowych braków i sformułował profesjonalny prompt techniczny.
 - **Własną ręką: obsługa błędu (commit `wlasna reka: obsluga bledu zapisu`):**
   - Wdrożenie bloku `try ... catch (Exception ex)` wokół operacji `File.WriteAllText` oraz kontrolki `StatusText` pod przyciskiem zapisu.
+
+---
+
+## Warunek 3: Powtórka rundy 1 bez zmiany w prośbie i analiza niedeterminizmu
+
+Runda 1 została uruchomiona po raz drugi z **identyczną prośbą** bez zmiany ani jednego znaku:
+> „Zrób notatnik: pole na tytuł, pole na treść, przycisk zapisu i lista zapisanych notatek. Notatki mają być zapisywane do pliku.”
+
+Wynik drugiego uruchomienia został utrwalony w pliku **[rundy/runda-1-powtorka.md](file:///rundy/runda-1-powtorka.md)**.
+
+### Co różni powtórkę od pierwszego uruchomienia:
+1. **Format pliku i serializacja:** Za pierwszym razem model zaimplementował zwykły plik tekstowy `notes.txt` z separatorem `---`. Przy powtórzeniu model użył formatu JSON (`notes.json`) z serializacją obiektów klasy `Note`.
+2. **Znaczniki czasu:** W pierwszym uruchomieniu wpisy nie posiadały daty ani godziny utworzenia; w powtórce model dodał pole daty w standardzie ISO 8601 (`Date`).
+3. **Obsługa listy:** W pierwszym podejściu aplikacja dzieliła tekst po separatorze, natomiast w powtórce deserializowała tablicę obiektów JSON przy starcie programu.
+
+### Wpływ niedeterminizmu modelu na różnice między rundami 1–4:
+Znaczna część początkowych różnic w strukturze pliku i formatowaniu między rundami 1 i 2 wynikała właśnie z losowości i braku narzuconych ograniczeń (niedeterminizmu modelu), natomiast stabilizacja i powtarzalność formatu w rundach 3 i 4 były już bezpośrednią zasługą jednoznacznych przykładów (few-shot).

@@ -25,3 +25,27 @@ Zgodnie z zasadą modułu (obowiązkowe dziesięć minut na czytanie i weryfikac
 4. **Weryfikacja obsługi błędów („Własną ręką: obsługa błędu”):**
    - Ręcznie zweryfikowano zabezpieczenie zapisu do pliku w klamrach `try ... catch (Exception ex)`.
    - Przetestowano scenariusz awaryjny (plik oznaczony atrybutem „tylko do odczytu”): aplikacja nie wyłącza się, a w kontrolce `StatusText` natychmiast pojawia się czytelny komunikat z treścią wyjątku systemowego.
+
+---
+
+## Warunek 2: Cztery rundy próśb, kopie w `rundy/` i dedykowane commity
+
+Każda runda została utrwalona osobnym commitem w historii repozytorium Git, a dokładny wynik zapisany na dysku po uruchomieniu aplikacji trafił do katalogu `rundy/`:
+
+- **[runda-1.md](file:///rundy/runda-1.md) (commit `runda 1`):**
+  - *Prośba:* sama prośba bez podania formatu (*zero-shot*).
+  - *Wynik:* model samodzielnie zdecydował o nazwie pliku (`notes.txt`), formacie wpisów (`Tytuł: ... Treść: ... ---`) i dopisywaniu na końcu.
+- **[runda-2.md](file:///rundy/runda-2.md) (commit `runda 2`):**
+  - *Prośba:* dodanie wymogów formatu (plik `notatki.md`, nagłówek `## 2026-09-08 14:32 — Tytuł`, najnowsza na górze, polskie znaki).
+  - *Wynik:* ujednolicenie pliku do Markdowna, wymuszenie UTF-8 i odwróconej chronologii.
+- **[runda-3.md](file:///rundy/runda-3.md) (commit `runda 3`):**
+  - *Prośba:* technika *one-shot* (jeden pełny przykład w prompcie).
+  - *Wynik:* precyzyjne odwzorowanie formatowania bez potrzeby formułowania długich opisów reguł.
+- **[runda-4.md](file:///rundy/runda-4.md) (commit `runda 4`):**
+  - *Prośba:* technika *few-shot* (trzy zróżnicowane przykłady: jednolinijkowy, wielolinijkowy, z polskimi znakami i myślnikiem w tytule).
+  - *Wynik:* stabilny, docelowy format aplikacji odporny na przypadki brzegowe.
+- **[runda-5.md](file:///rundy/runda-5.md) (commit `runda 5`):**
+  - *Prośba:* *meta-prompt* (zapytanie modelu o wady prośby z rundy 1 i wygenerowanie przez model kompletnej, poprawionej wersji prośby).
+  - *Wynik:* model wskazał 5 kluczowych braków i sformułował profesjonalny prompt techniczny.
+- **Własną ręką: obsługa błędu (commit `wlasna reka: obsluga bledu zapisu`):**
+  - Wdrożenie bloku `try ... catch (Exception ex)` wokół operacji `File.WriteAllText` oraz kontrolki `StatusText` pod przyciskiem zapisu.

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
@@ -7,7 +9,7 @@ namespace notatnik;
 
 public partial class MainWindow : Window
 {
-    private const string FilePath = "notes.txt";
+    private const string FilePath = "notatki.md";
     private readonly List<string> _notes = new();
 
     public MainWindow()
@@ -21,15 +23,16 @@ public partial class MainWindow : Window
         _notes.Clear();
         if (File.Exists(FilePath))
         {
-            var content = File.ReadAllText(FilePath);
-            var items = content.Split(new[] { "---" }, System.StringSplitOptions.RemoveEmptyEntries);
-            foreach (var item in items)
+            var content = File.ReadAllText(FilePath, Encoding.UTF8);
+            var sections = content.Split(new[] { "\n\n## ", "\r\n\r\n## " }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var section in sections)
             {
-                var trimmed = item.Trim();
-                if (!string.IsNullOrWhiteSpace(trimmed))
+                var entry = section.Trim();
+                if (!entry.StartsWith("## "))
                 {
-                    _notes.Add(trimmed);
+                    entry = "## " + entry;
                 }
+                _notes.Add(entry);
             }
         }
         NotesListBox.ItemsSource = _notes.ToArray();
@@ -45,8 +48,28 @@ public partial class MainWindow : Window
             return;
         }
 
-        var entry = $"Tytuł: {title}\nTreść: {content}\n---\n";
-        File.AppendAllText(FilePath, entry);
+        var timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+        var newEntry = $"## {timestamp} — {title}\n{content}";
+
+        string fullContent;
+        if (File.Exists(FilePath))
+        {
+            var existingContent = File.ReadAllText(FilePath, Encoding.UTF8).Trim();
+            if (string.IsNullOrWhiteSpace(existingContent))
+            {
+                fullContent = newEntry + "\n";
+            }
+            else
+            {
+                fullContent = newEntry + "\n\n" + existingContent + "\n";
+            }
+        }
+        else
+        {
+            fullContent = newEntry + "\n";
+        }
+
+        File.WriteAllText(FilePath, fullContent, Encoding.UTF8);
 
         TitleBox.Text = string.Empty;
         ContentBox.Text = string.Empty;

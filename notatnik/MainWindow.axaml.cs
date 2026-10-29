@@ -23,16 +23,34 @@ public partial class MainWindow : Window
         _notes.Clear();
         if (File.Exists(FilePath))
         {
-            var content = File.ReadAllText(FilePath, Encoding.UTF8);
-            var sections = content.Split(new[] { "\n\n## ", "\r\n\r\n## " }, StringSplitOptions.RemoveEmptyEntries);
-            foreach (var section in sections)
+            var text = File.ReadAllText(FilePath, Encoding.UTF8);
+            var lines = text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+            var currentEntry = new StringBuilder();
+
+            foreach (var line in lines)
             {
-                var entry = section.Trim();
-                if (!entry.StartsWith("## "))
+                if (line.StartsWith("## "))
                 {
-                    entry = "## " + entry;
+                    if (currentEntry.Length > 0)
+                    {
+                        var trimmed = currentEntry.ToString().Trim();
+                        if (!string.IsNullOrEmpty(trimmed))
+                        {
+                            _notes.Add(trimmed);
+                        }
+                        currentEntry.Clear();
+                    }
                 }
-                _notes.Add(entry);
+                currentEntry.AppendLine(line);
+            }
+
+            if (currentEntry.Length > 0)
+            {
+                var trimmed = currentEntry.ToString().Trim();
+                if (!string.IsNullOrEmpty(trimmed))
+                {
+                    _notes.Add(trimmed);
+                }
             }
         }
         NotesListBox.ItemsSource = _notes.ToArray();

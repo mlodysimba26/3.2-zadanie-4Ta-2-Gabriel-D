@@ -5,7 +5,7 @@
         mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="550"
         Width="650" Height="550"
         x:Class="notatnik.MainWindow"
-        Title="Notatnik - Runda 2">
+        Title="Notatnik - Runda 3">
 
     <Grid RowDefinitions="Auto,*,Auto" Margin="16">
         <!-- Formularz dodawania notatki -->

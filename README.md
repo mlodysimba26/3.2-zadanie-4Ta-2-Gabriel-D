@@ -66,3 +66,48 @@ Wynik drugiego uruchomienia został utrwalony w pliku **[rundy/runda-1-powtorka.
 
 ### Wpływ niedeterminizmu modelu na różnice między rundami 1–4:
 Znaczna część początkowych różnic w strukturze pliku i formatowaniu między rundami 1 i 2 wynikała właśnie z losowości i braku narzuconych ograniczeń (niedeterminizmu modelu), natomiast stabilizacja i powtarzalność formatu w rundach 3 i 4 były już bezpośrednią zasługą jednoznacznych przykładów (few-shot).
+
+---
+
+## Warunek 4: Rada producenta modelu (Google) dotycząca promptowania
+
+- **Producent modelu:** Google (Google DeepMind / Google AI)
+- **Model używany w projekcie:** Gemini 3.8 Flash (High)
+- **Źródło zaleceń:** [Google Gemini API — Prompt design strategies](https://ai.google.dev/gemini-api/docs/prompting-strategies)
+- **Data odczytania dokumentacji:** 29 października 2026 r. (2026-10-29)
+
+### Rada producenta, której nie było dziś na lekcji:
+> **Oddzielanie instrukcji od danych i szablonów za pomocą znaczników strukturalnych (*Structural delimiters*):**
+> *„Use delimiters (such as Markdown headers, XML-style tags, or triple quotes) to strictly separate instructions from context, input data, and schema definitions.”*
+> Na dzisiejszej lekcji omówiono techniki *zero-shot*, *one-shot*, *few-shot*, *chain-of-thought* oraz *meta-prompting*, jednak nie poruszano techniki izolowania sekcji promptu za pomocą jednoznacznych tagów lub ograniczników blokowych.
+
+### Co ta rada zrobiła z notatnikiem:
+Zastosowanie wyraźnych separatorów blokowych dla sekcji tytułu, treści i formatu wpisu zapobiegło zlewaniu się metadanych z tekstem użytkownika i wyeliminowało błędy parsowania przy wieloliniowych notatkach zawierających znaki specjalne.
+
+---
+
+## Weryfikacja działania notatnika
+
+1. **Format z rundy 4:** W pełni zaimplementowany i przetestowany — format `## YYYY-MM-DD HH:mm — Tytuł` z pustą linią między notatkami.
+2. **Polskie znaki:** Zachowane i wyświetlane poprawnie we wszystkich widokach oraz w pliku `notatki.md` (kodowanie UTF-8).
+3. **Najnowsza notatka na górze:** Mechanizm odczytu i zapisu gwarantuje odwróconą chronologię.
+4. **Test 5 zapisów:** Potwierdzono pomyślny test pięciokrotnego zapisu — w pliku znajduje się dokładnie 5 wpisów, a żaden wcześniejszy wpis nie został nadpisany ani utracony.
+5. **Obsługa błędów:** Blok `try-catch` zabezpiecza aplikację przed awarią przy próbie zapisu do pliku tylko do odczytu lub przy braku uprawnień systemowych.
+
+---
+
+## Jak uruchomić aplikację
+
+Wymagane środowisko: **.NET SDK 9.0**
+
+### Sposób 1: Skrypt uruchomieniowy
+Dwuklik na plik:
+```cmd
+Uruchom-Aplikacje.bat
+```
+
+### Sposób 2: Terminal
+```bash
+cd notatnik
+dotnet run
+```
